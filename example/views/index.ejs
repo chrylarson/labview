@@ -1,0 +1,8 @@
+<% layout('layout') -%>
+<% if (!user) { %>
+  <h2>Welcome! Please log in.</h2>
+<% } else { %>
+  <h2>Hello, <%= user.username %>.</h2>
+<% } %>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/main.js"></script>

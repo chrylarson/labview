@@ -3,13 +3,11 @@
   "version": "0.0.0",
   "main": "lib/labview.js",
   "description": "Web Server for LabVIEW front panels",
-  "homepage": "labview.chrislarson.me",
-  "bugs": "https://github.com/chrylarson/labview/issues",
-  "author": {
-    "name": "Chris Larson",
-    "email": "chris@chrislarson.me",
-    "url": "chrislarson.me"
+  "homepage": "http://labview.chrislarson.me",
+  "bugs": {
+    "url": "https://github.com/chrylarson/labview/issues"
   },
+  "author": "Chris Larson <chris@chrislarson.me> (chrislarson.me)",
   "repository": {
     "type": "git",
     "url": "https://github.com/chrylarson/labview"
@@ -40,6 +38,18 @@
   },
   "preferGlobal": "true",
   "dependencies": {
-    "socket.io": "~1.0.6"
+    "socket.io": "~1.0.6",
+    "express": "~4.8.3",
+    "passport.socketio": "~3.2.0",
+    "ejs-locals": "~1.0.2",
+    "express-session": "~1.7.5",
+    "method-override": "~2.1.3",
+    "body-parser": "~1.6.3",
+    "connect": "~2.25.5",
+    "passport": "~0.2.0"
+  },
+  "directories": {
+    "example": "example",
+    "test": "test"
   }
 }
