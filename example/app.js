@@ -221,7 +221,7 @@ var netServer = net.createServer(function(c) { //'connection' listener
     console.log(data.toString());
   });
   c.write('hello\r\n');
-  c.pipe(c);
+  //c.pipe(c);
 });
 
 netServer.listen(1337, function() { //'listening' listener
