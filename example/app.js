@@ -1,4 +1,5 @@
 var flash = require('connect-flash')
+  , net = require('net')
   , express = require('express')
   , app = express()
   , engine = require('ejs-locals')
@@ -10,12 +11,13 @@ var flash = require('connect-flash')
   , sessionStore = new session.MemoryStore
   , LocalStrategy = require('passport-local').Strategy
   , fs = require('fs')  
-  , options = {
+/*   , options = {
       key: fs.readFileSync('./cert/client.key'),
       cert: fs.readFileSync('./cert/client.crt'),
       requestCert: true
     }
-  , server = require('https').Server(options, app)
+  , server = require('https').Server(app)	*/
+  , server = require('http').Server(app)
   , io = require("socket.io")(server)
   , passportSocketIo = require("passport.socketio");
   
@@ -106,7 +108,7 @@ passport.use(new LocalStrategy(
   app.use(express.static(__dirname + '/public')); 
 
 
-
+// Routes
 app.get('/', function(req, res){
   res.render('index', { user: req.user });
 });
@@ -156,7 +158,7 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-io.use(passportSocketIo.authorize({
+io.set('authorization', passportSocketIo.authorize({
   passport: require('passport'),
   cookieParser: CookieParser,
   key:         'connect.sid',       // the name of the cookie where express/connect stores its session_id
@@ -199,7 +201,6 @@ function onAuthorizeFail(data, message, error, accept){
 
 server.listen(3000);
 
-
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
 //   the request is authenticated (typically via a persistent login session),
@@ -209,3 +210,20 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
 }
+
+var netServer = net.createServer(function(c) { //'connection' listener
+  console.log('server connected');
+  c.on('end', function() {
+    console.log('server disconnected');
+  });
+  c.on('data', function(data) {
+    io.sockets.emit('data', { livedata: data.toString() }); 
+    console.log(data.toString());
+  });
+  c.write('hello\r\n');
+  c.pipe(c);
+});
+
+netServer.listen(1337, function() { //'listening' listener
+  console.log('server bound');
+});
